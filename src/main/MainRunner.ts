@@ -76,6 +76,18 @@ export async function createMainWindow(): Promise<BrowserWindow> {
   }
   const mainWindow = new BrowserWindow(opt)
 
+  // Set Content Security Policy
+  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [
+          'default-src \'self\'; script-src \'self\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\' data:; font-src \'self\' data:; connect-src \'self\'',
+        ],
+      },
+    })
+  })
+
   mainWindow.setMenu(null)
 
   mainWindow.on('close', (event: Event): void => {
@@ -131,6 +143,18 @@ export async function createErrorWindow(errorWindow: BrowserWindow, mainWindow: 
     show: false,
     resizable: Constants.IS_DEV_ENV,
     webPreferences: Constants.DEFAULT_WEB_PREFERENCES,
+  })
+
+  // Set Content Security Policy
+  errorWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [
+          'default-src \'self\'; script-src \'self\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\' data:; font-src \'self\' data:; connect-src \'self\'',
+        ],
+      },
+    })
   })
 
   errorWindow.setMenu(null)

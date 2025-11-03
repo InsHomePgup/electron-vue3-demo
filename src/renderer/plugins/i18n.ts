@@ -14,7 +14,7 @@ import { getCurrentLocale } from '@/renderer/utils'
 
 export default createI18n({
   locale: getCurrentLocale(),
-  fallbackLocale: 'en',
+  fallbackLocale: 'zhHans',
   globalInjection: true,
   messages: {
     en,

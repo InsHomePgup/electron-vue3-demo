@@ -20,8 +20,8 @@ import 'vuetify/styles'
 export default createVuetify({
   locale: {
     messages: { ko, en, zhHans, zhHant, de, es, ja, fr, ru, pt, nl },
-    locale: 'en',
-    fallback: 'en',
+    locale: 'zhHans',
+    fallback: 'zhHans',
   },
   defaults: {
     VBtn: {
