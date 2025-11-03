@@ -1,4 +1,5 @@
-import { ipcMain, shell, IpcMainEvent, dialog } from 'electron'
+import type { IpcMainEvent } from 'electron'
+import { dialog, ipcMain, shell } from 'electron'
 import Constants from './utils/Constants'
 
 /*
@@ -16,7 +17,7 @@ export default class IPCs {
       'msgOpenExternalLink',
       async (event: IpcMainEvent, url: string) => {
         await shell.openExternal(url)
-      }
+      },
     )
 
     // Open file
@@ -26,15 +27,16 @@ export default class IPCs {
         const filters = []
         if (filter === 'text') {
           filters.push({ name: 'Text', extensions: ['txt', 'json'] })
-        } else if (filter === 'zip') {
+        }
+        else if (filter === 'zip') {
           filters.push({ name: 'Zip', extensions: ['zip'] })
         }
         const dialogResult = await dialog.showOpenDialog({
           properties: ['openFile'],
-          filters
+          filters,
         })
         return dialogResult
-      }
+      },
     )
   }
 }

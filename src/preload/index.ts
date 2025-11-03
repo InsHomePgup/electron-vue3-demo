@@ -1,5 +1,6 @@
+import type { IpcRendererEvent } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import log from 'electron-log/renderer'
-import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
 
 // Initialize renderer logger
 log.transports.console.level = 'silly'
@@ -9,7 +10,7 @@ log.transports.console.format = '{h}:{i}:{s}.{ms} {text}'
 const mainAvailChannels: string[] = [
   'msgRequestGetVersion',
   'msgOpenExternalLink',
-  'msgOpenFile'
+  'msgOpenFile',
 ]
 const rendererAvailChannels: string[] = []
 
@@ -20,37 +21,41 @@ contextBridge.exposeInMainWorld('mainApi', {
       if (process.env.NODE_ENV === 'development') {
         log.silly(`[IPC_SEND::${channel}]`, { request: data })
       }
-    } else {
+    }
+    else {
       throw new Error(`Unknown ipc channel name: ${channel}`)
     }
   },
   on: (
     channel: string,
-    listener: (event: IpcRendererEvent, ...args: any[]) => void
+    listener: (event: IpcRendererEvent, ...args: any[]) => void,
   ): void => {
     if (rendererAvailChannels.includes(channel)) {
       ipcRenderer.on(channel, listener)
-    } else {
+    }
+    else {
       throw new Error(`Unknown ipc channel name: ${channel}`)
     }
   },
   once: (
     channel: string,
-    listener: (event: IpcRendererEvent, ...args: any[]) => void
+    listener: (event: IpcRendererEvent, ...args: any[]) => void,
   ): void => {
     if (rendererAvailChannels.includes(channel)) {
       ipcRenderer.once(channel, listener)
-    } else {
+    }
+    else {
       throw new Error(`Unknown ipc channel name: ${channel}`)
     }
   },
   off: (
     channel: string,
-    listener: (event: IpcRendererEvent, ...args: any[]) => void
+    listener: (event: IpcRendererEvent, ...args: any[]) => void,
   ): void => {
     if (rendererAvailChannels.includes(channel)) {
       ipcRenderer.off(channel, listener)
-    } else {
+    }
+    else {
       throw new Error(`Unknown ipc channel name: ${channel}`)
     }
   },
@@ -60,12 +65,12 @@ contextBridge.exposeInMainWorld('mainApi', {
       if (process.env.NODE_ENV === 'development') {
         log.silly(`[IPC_INVOKE::${channel}]`, {
           request: data,
-          result
+          result,
         })
       }
       return result
     }
 
     throw new Error(`Unknown ipc channel name: ${channel}`)
-  }
+  },
 })

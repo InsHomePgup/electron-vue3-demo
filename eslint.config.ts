@@ -1,85 +1,46 @@
-import { globalIgnores } from 'eslint/config'
-import pluginJs from '@eslint/js'
-import pluginTypeScriptESLint from 'typescript-eslint'
-import parserVue from 'vue-eslint-parser'
-import parserTypeScript from '@typescript-eslint/parser'
-import pluginVue from 'eslint-plugin-vue'
-import pluginNode from 'eslint-plugin-n'
-import pluginImport from 'eslint-plugin-import'
-import pluginPrettier from 'eslint-plugin-prettier/recommended'
+import antfu from '@antfu/eslint-config'
 
-import globals from 'globals'
-
-export default pluginTypeScriptESLint.config(
-  pluginPrettier,
-  pluginJs.configs.recommended,
-  pluginTypeScriptESLint.configs.recommended,
-  pluginImport.flatConfigs.electron,
-  pluginNode.configs['flat/recommended-script'],
-  ...pluginVue.configs['flat/strongly-recommended'],
-  globalIgnores([
-    '**/node_modules',
-    '**/dist',
-    '**/release',
-    '**/docs',
-    '**/.idea',
-    '**/.vscode',
-    '**/buildAssets/builder',
-    '**/tests/results',
-    '**/package-lock.json'
-  ]),
+export default antfu(
   {
-    files: ['**/*.{js,mjs,cjs,ts,vue}'],
-    languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      globals: {
-        ...globals.browser,
-        ...globals.node
-      },
-      parser: parserVue,
-      parserOptions: {
-        parser: parserTypeScript,
-        ecmaVersion: 2022,
-        ecmaFeatures: {
-          jsx: true
-        },
-        requireConfigFile: false
-      }
+    type: 'lib',
+    typescript: true,
+    vue: true,
+    formatters: true,
+    stylistic: {
+      indent: 2,
+      quotes: 'single',
+      semi: false,
     },
+  },
+  {
+    ignores: [
+      '**/node_modules',
+      '**/dist',
+      '**/release',
+      '**/docs',
+      '**/.idea',
+      '**/.vscode',
+      '**/buildAssets/builder',
+      '**/tests/results',
+      '**/package-lock.json',
+    ],
+  },
+  {
     rules: {
-      // override/add rules settings here, such as:
-      eqeqeq: 'error',
-      'no-unused-vars': 'off',
-      'no-case-declarations': 'off',
-      'no-trailing-spaces': 'error',
-      'no-unsafe-optional-chaining': 'off',
-      'no-control-regex': 'off',
-      'n/no-missing-import': 'off',
-      'n/no-unsupported-features/node-builtins': 'off',
-      'vue/v-on-event-hyphenation': 'off',
-      'vue/no-v-text-v-html-on-component': 'off',
-      'vue/attribute-hyphenation': 'off',
-      'vue/max-attributes-per-line': [
-        'error',
-        {
-          singleline: {
-            max: 1
-          },
-          multiline: {
-            max: 1
-          }
-        }
-      ],
-      '@typescript-eslint/no-unused-vars': [
+      // Custom rules to match your project's needs
+      'no-console': 'off',
+      'node/prefer-global/process': 'off',
+      'node/no-process-env': 'off',
+      'ts/no-explicit-any': 'off',
+      'ts/explicit-function-return-type': 'off',
+      'unused-imports/no-unused-vars': [
         'error',
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
-          caughtErrorsIgnorePattern: '^_'
-        }
+          caughtErrorsIgnorePattern: '^_',
+        },
       ],
-      '@typescript-eslint/no-explicit-any': 'off'
-    }
-  }
+    },
+  },
 )

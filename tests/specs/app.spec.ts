@@ -1,4 +1,4 @@
-import { test, expect, beforeAll, afterAll } from '../fixtures.mjs'
+import { afterAll, beforeAll, expect, test } from '../fixtures.mjs'
 
 test.beforeAll(beforeAll)
 test.afterAll(afterAll)
@@ -8,15 +8,16 @@ test('Document element check', async ({ page, util }) => {
   try {
     await expect(
       page.getByTestId('main-logo').first(),
-      `Confirm main logo is visible`
+      `Confirm main logo is visible`,
     ).toBeVisible()
     await expect(
       page.getByTestId('select-language').first(),
-      `Confirm language selector is visible`
+      `Confirm language selector is visible`,
     ).toBeVisible()
 
     await util.captureScreenshot(page, 'result')
-  } catch (error) {
+  }
+  catch (error) {
     throw await util.onTestError(error)
   }
 })
@@ -32,7 +33,8 @@ test('Counter button click check', async ({ page, util }) => {
       .innerHTML()
 
     expect(counterValueElement).toBe('10')
-  } catch (error) {
+  }
+  catch (error) {
     throw await util.onTestError(error)
   }
 })

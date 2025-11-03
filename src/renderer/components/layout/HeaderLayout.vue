@@ -1,7 +1,7 @@
 <script setup lang="tsx">
-import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { mdiFitToScreenOutline, mdiHome } from '@mdi/js'
+import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
 const route: any = useRoute()
@@ -9,11 +9,11 @@ const titleKey: string = (route?.meta?.titleKey || 'title.main') as string
 
 const { t } = useI18n()
 
-const handleRoute = (path: string): void => {
+function handleRoute(path: string): void {
   router.push(path)
 }
 
-const isCurrentRoute = (path: string): boolean => {
+function isCurrentRoute(path: string): boolean {
   return path === route.path
 }
 
@@ -25,15 +25,16 @@ const headerMenus: {
   {
     icon: mdiHome,
     text: 'title.main',
-    path: '/'
+    path: '/',
   },
   {
     icon: mdiFitToScreenOutline,
     text: 'title.second',
-    path: '/second'
-  }
+    path: '/second',
+  },
 ]
 </script>
+
 <template>
   <v-app-bar
     color="primary"
@@ -54,6 +55,7 @@ const headerMenus: {
     </template>
   </v-app-bar>
 </template>
+
 <style scoped>
 .v-btn {
   opacity: 0.4;

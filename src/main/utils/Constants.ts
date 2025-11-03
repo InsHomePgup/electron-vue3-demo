@@ -1,6 +1,6 @@
-import { join, dirname, resolve } from 'path'
-import { name, version, debug } from '../../../package.json'
-import { fileURLToPath } from 'url'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { debug, name, version } from '../../../package.json'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -9,7 +9,7 @@ export interface TrayOptions {
   trayWindow: boolean
   menu: boolean
   tooltip: string
-  margin: { x: number; y: number }
+  margin: { x: number, y: number }
   showAtStartup: boolean
 }
 
@@ -44,7 +44,7 @@ export default class Constants {
     nodeIntegration: false,
     contextIsolation: true,
     enableRemoteModule: false,
-    preload: join(__dirname, '../preload/index.js')
+    preload: join(__dirname, '../preload/index.js'),
   }
 
   static DEFAULT_TRAY_OPTIONS: TrayOptions = {
@@ -53,7 +53,7 @@ export default class Constants {
     menu: false,
     tooltip: 'Vutron App',
     margin: { x: 0, y: 0 },
-    showAtStartup: false
+    showAtStartup: false,
   }
 
   static APP_INDEX_URL_DEV = `${debug.env.VITE_DEV_SERVER_URL}/index.html`

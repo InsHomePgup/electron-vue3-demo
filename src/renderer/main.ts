@@ -1,10 +1,10 @@
 import { createApp } from 'vue'
 
 import App from '@/renderer/App.vue'
-import router from '@/renderer/router'
-import vuetify from '@/renderer/plugins/vuetify'
 import i18n from '@/renderer/plugins/i18n'
 import pinia from '@/renderer/plugins/pinia'
+import vuetify from '@/renderer/plugins/vuetify'
+import router from '@/renderer/router'
 
 // Add API key defined in contextBridge to window object type
 declare global {

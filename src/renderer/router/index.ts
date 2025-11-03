@@ -1,5 +1,5 @@
-import { MainScreen } from '@/renderer/screens'
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { MainScreen } from '@/renderer/screens'
 
 export default createRouter({
   history: createWebHashHistory(),
@@ -8,26 +8,26 @@ export default createRouter({
       path: '/',
       component: MainScreen,
       meta: {
-        titleKey: 'title.main'
-      }
+        titleKey: 'title.main',
+      },
     },
     {
       path: '/second',
       component: () => import('@/renderer/screens/SecondScreen.vue'),
       meta: {
-        titleKey: 'title.second'
-      }
+        titleKey: 'title.second',
+      },
     },
     {
       path: '/error',
       component: () => import('@/renderer/screens/ErrorScreen.vue'),
       meta: {
-        titleKey: 'title.error'
-      }
+        titleKey: 'title.error',
+      },
     },
     {
       path: '/:pathMatch(.*)*',
-      redirect: '/'
-    }
-  ]
+      redirect: '/',
+    },
+  ],
 })

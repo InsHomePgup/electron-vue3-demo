@@ -1,17 +1,17 @@
 <script setup lang="tsx">
-import { useI18n } from 'vue-i18n'
-import { useTheme } from 'vuetify'
-import { openExternal, openFile } from '@/renderer/utils'
-import { useCounterStore } from '@/renderer/store/counter'
-import { onMounted, ref } from 'vue'
 import {
   mdiBrightness6,
   mdiFileDocument,
   mdiFolderOpen,
   mdiGithub,
-  mdiPlusCircle
+  mdiPlusCircle,
 } from '@mdi/js'
 import { storeToRefs } from 'pinia'
+import { onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useTheme } from 'vuetify'
+import { useCounterStore } from '@/renderer/store/counter'
+import { openExternal, openFile } from '@/renderer/utils'
 
 const { t, locale, availableLocales } = useI18n()
 const { increaseCount } = useCounterStore()
@@ -28,33 +28,33 @@ onMounted((): void => {
   getApplicationVersionFromMainProcess()
 })
 
-const getApplicationVersionFromMainProcess = (): void => {
+function getApplicationVersionFromMainProcess(): void {
   window.mainApi.invoke('msgRequestGetVersion').then((result: string) => {
     appVersion.value = result
   })
 }
 
-const handleChangeTheme = (): void => {
+function handleChangeTheme(): void {
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
 }
 
-const handleChangeLanguage = (val): void => {
+function handleChangeLanguage(val): void {
   locale.value = val
 }
 
-const handleOpenDocument = async (): Promise<void> => {
+async function handleOpenDocument(): Promise<void> {
   await openExternal('https://vutron.cdget.com')
 }
 
-const handleOpenGitHub = async (): Promise<void> => {
+async function handleOpenGitHub(): Promise<void> {
   await openExternal('https://github.com/jooy2/vutron')
 }
 
-const handleCountIncrease = (): void => {
+function handleCountIncrease(): void {
   increaseCount(1)
 }
 
-const handleOpenFile = async () => {
+async function handleOpenFile() {
   const dialogResult = await openFile('text')
   if (!dialogResult.canceled) {
     selectedFile.value = dialogResult.filePaths[0]
@@ -94,7 +94,7 @@ const handleOpenFile = async () => {
         <p v-if="selectedFile">
           {{
             t('desc.selected-file', {
-              filePath: selectedFile
+              filePath: selectedFile,
             })
           }}
         </p>

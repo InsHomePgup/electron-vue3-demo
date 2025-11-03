@@ -1,6 +1,6 @@
-name: 'Fix typo request'
+name: Fix typo request
 description: Request to fix a typo or bad translation in this project
-labels: ['typo']
+labels: [typo]
 body:
   - type: markdown
     attributes:

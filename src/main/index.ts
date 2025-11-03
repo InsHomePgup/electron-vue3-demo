@@ -1,16 +1,17 @@
-import { app, WebContents, RenderProcessGoneDetails } from 'electron'
-import Constants from './utils/Constants'
-import { createErrorWindow, createMainWindow } from './MainRunner'
+import type { RenderProcessGoneDetails, WebContents } from 'electron'
+import { join } from 'node:path'
+import { app } from 'electron'
 import log from 'electron-log/main'
-import { join } from 'path'
+import { createErrorWindow, createMainWindow } from './MainRunner'
+import Constants from './utils/Constants'
 
 let mainWindow
 let errorWindow
 
-const initializeMainLogger = () => {
+function initializeMainLogger() {
   log.initialize({
     includeFutureSessions: false,
-    preload: true
+    preload: true,
   })
 
   const appLogFilePath = join(app.getPath('userData'), 'logs', 'applog.log')
@@ -62,10 +63,10 @@ app.on(
   (
     event: Event,
     webContents: WebContents,
-    details: RenderProcessGoneDetails
+    details: RenderProcessGoneDetails,
   ) => {
     errorWindow = createErrorWindow(errorWindow, mainWindow, details)
-  }
+  },
 )
 
 process.on('uncaughtException', () => {

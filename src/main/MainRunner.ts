@@ -1,13 +1,16 @@
+import type {
+  BrowserWindowConstructorOptions,
+  RenderProcessGoneDetails,
+} from 'electron'
+import type { TrayOptions } from './utils/Constants'
 import {
   app,
   BrowserWindow,
-  RenderProcessGoneDetails,
-  BrowserWindowConstructorOptions
 } from 'electron'
-import Constants, { TrayOptions } from './utils/Constants'
+import log from 'electron-log/main'
 import IPCs from './IPCs'
 import { createTray, hideWindow, showWindow } from './tray'
-import log from 'electron-log/main'
+import Constants from './utils/Constants'
 
 const options = {
   width: Constants.IS_DEV_ENV ? 1500 : 1200,
@@ -16,11 +19,11 @@ const options = {
     // all optional values from DEFAULT_TRAY_OPTIONS can de defined here
     enabled: true,
     menu: false, // true, to use a tray menu ; false to toggle visibility on click on tray icon
-    trayWindow: false // true, to use a tray floating window attached to top try icon
-  }
+    trayWindow: false, // true, to use a tray floating window attached to top try icon
+  },
 }
 
-const exitApp = (mainWindow: BrowserWindow): void => {
+function exitApp(mainWindow: BrowserWindow): void {
   if (mainWindow && !mainWindow.isDestroyed()) {
     mainWindow.hide()
   }
@@ -28,7 +31,7 @@ const exitApp = (mainWindow: BrowserWindow): void => {
   app.exit()
 }
 
-export const createMainWindow = async (): Promise<BrowserWindow> => {
+export async function createMainWindow(): Promise<BrowserWindow> {
   log.silly('Creating new window...')
 
   let opt: BrowserWindowConstructorOptions = {
@@ -38,16 +41,16 @@ export const createMainWindow = async (): Promise<BrowserWindow> => {
     height: options.height,
     useContentSize: true,
     webPreferences: Constants.DEFAULT_WEB_PREFERENCES,
-    frame: true
+    frame: true,
   }
   const trayOptions: TrayOptions = options.tray?.enabled
     ? {
         ...Constants.DEFAULT_TRAY_OPTIONS,
-        ...options.tray
+        ...options.tray,
       }
     : {
         ...Constants.DEFAULT_TRAY_OPTIONS,
-        enabled: false
+        enabled: false,
       }
 
   // trayWindow requires tray.enabled=true
@@ -67,8 +70,8 @@ export const createMainWindow = async (): Promise<BrowserWindow> => {
       alwaysOnTop: true,
       webPreferences: {
         ...Constants.DEFAULT_WEB_PREFERENCES,
-        backgroundThrottling: false
-      }
+        backgroundThrottling: false,
+      },
     }
   }
   const mainWindow = new BrowserWindow(opt)
@@ -95,7 +98,8 @@ export const createMainWindow = async (): Promise<BrowserWindow> => {
     if (trayOptions.showAtStartup) {
       showWindow(mainWindow)
     }
-  } else {
+  }
+  else {
     mainWindow.once('ready-to-show', (): void => {
       mainWindow.setAlwaysOnTop(true)
       mainWindow.show()
@@ -109,19 +113,15 @@ export const createMainWindow = async (): Promise<BrowserWindow> => {
 
   if (Constants.IS_DEV_ENV) {
     await mainWindow.loadURL(Constants.APP_INDEX_URL_DEV)
-  } else {
+  }
+  else {
     await mainWindow.loadFile(Constants.APP_INDEX_URL_PROD)
   }
 
   return mainWindow
 }
 
-export const createErrorWindow = async (
-  errorWindow: BrowserWindow,
-  mainWindow: BrowserWindow,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  details?: RenderProcessGoneDetails
-): Promise<BrowserWindow> => {
+export async function createErrorWindow(errorWindow: BrowserWindow, mainWindow: BrowserWindow, _details?: RenderProcessGoneDetails): Promise<BrowserWindow> {
   if (!Constants.IS_DEV_ENV) {
     mainWindow?.hide()
   }
@@ -130,14 +130,15 @@ export const createErrorWindow = async (
     title: Constants.APP_NAME,
     show: false,
     resizable: Constants.IS_DEV_ENV,
-    webPreferences: Constants.DEFAULT_WEB_PREFERENCES
+    webPreferences: Constants.DEFAULT_WEB_PREFERENCES,
   })
 
   errorWindow.setMenu(null)
 
   if (Constants.IS_DEV_ENV) {
     await errorWindow.loadURL(`${Constants.APP_INDEX_URL_DEV}#/error`)
-  } else {
+  }
+  else {
     await errorWindow.loadFile(Constants.APP_INDEX_URL_PROD, { hash: 'error' })
   }
 

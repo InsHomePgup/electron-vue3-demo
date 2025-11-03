@@ -1,6 +1,6 @@
-name: 'Feature request'
+name: Feature request
 description: Report a feature request in this project.
-labels: ['enhancement']
+labels: [enhancement]
 body:
   - type: markdown
     attributes:

@@ -1,5 +1,5 @@
-import { Page } from 'playwright'
-import { TestInfo } from 'playwright/test'
+import type { Page } from 'playwright'
+import type { TestInfo } from 'playwright/test'
 
 export default class TestUtil {
   _page: Page
@@ -23,7 +23,8 @@ export default class TestUtil {
       const screenshotPath = `${this._testScreenshotPath}/${screenshotName || `unknown_${Date.now()}`}.png`
 
       await pageInstance.screenshot({ path: screenshotPath })
-    } catch {
+    }
+    catch {
       // Do nothing
     }
   }

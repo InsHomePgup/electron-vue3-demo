@@ -1,14 +1,15 @@
-import { fileURLToPath } from 'url'
+import type { ElectronOptions } from 'vite-plugin-electron'
+import { rmSync } from 'node:fs'
+import { builtinModules } from 'node:module'
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import Vue from '@vitejs/plugin-vue'
+import VueJsx from '@vitejs/plugin-vue-jsx'
 import { defineConfig, loadEnv } from 'vite'
-import ElectronPlugin, { ElectronOptions } from 'vite-plugin-electron'
+import ElectronPlugin from 'vite-plugin-electron'
 import RendererPlugin from 'vite-plugin-electron-renderer'
 import EslintPlugin from 'vite-plugin-eslint'
 import VuetifyPlugin from 'vite-plugin-vuetify'
-import VueJsx from '@vitejs/plugin-vue-jsx'
-import Vue from '@vitejs/plugin-vue'
-import { rmSync } from 'fs'
-import { resolve, dirname } from 'path'
-import { builtinModules } from 'module'
 
 const isDevEnv = process.env.NODE_ENV === 'development'
 
@@ -16,11 +17,11 @@ export default defineConfig(({ mode }) => {
   process.env = {
     ...(isDevEnv
       ? {
-          ELECTRON_ENABLE_LOGGING: 'true'
+          ELECTRON_ENABLE_LOGGING: 'true',
         }
       : {}),
     ...process.env,
-    ...loadEnv(mode, process.cwd())
+    ...loadEnv(mode, process.cwd()),
   }
 
   rmSync('dist', { recursive: true, force: true })
@@ -32,7 +33,7 @@ export default defineConfig(({ mode }) => {
         const debugArgs = [
           '.',
           '--inspect=9228',
-          '--remote-debugging-port=9229'
+          '--remote-debugging-port=9229',
         ]
         startup(debugArgs)
       },
@@ -45,10 +46,10 @@ export default defineConfig(({ mode }) => {
           assetsDir: '.',
           outDir: 'dist/main',
           rollupOptions: {
-            external: ['electron', ...builtinModules]
-          }
-        }
-      }
+            external: ['electron', ...builtinModules],
+          },
+        },
+      },
     },
     {
       entry: 'src/preload/index.ts',
@@ -58,10 +59,10 @@ export default defineConfig(({ mode }) => {
       vite: {
         root: resolve('.'),
         build: {
-          outDir: 'dist/preload'
-        }
-      }
-    }
+          outDir: 'dist/preload',
+        },
+      },
+    },
   ]
 
   if (isDevEnv) {
@@ -70,9 +71,9 @@ export default defineConfig(({ mode }) => {
       vite: {
         root: resolve('.'),
         build: {
-          outDir: 'dist/main'
-        }
-      }
+          outDir: 'dist/main',
+        },
+      },
     })
   }
 
@@ -80,18 +81,18 @@ export default defineConfig(({ mode }) => {
     server: {
       host: '127.0.0.1',
       port: 5173,
-      strictPort: true
+      strictPort: true,
     },
     define: {
       __VUE_I18N_FULL_INSTALL__: true,
       __VUE_I18N_LEGACY_API__: false,
-      __INTLIFY_PROD_DEVTOOLS__: false
+      __INTLIFY_PROD_DEVTOOLS__: false,
     },
     resolve: {
       extensions: ['.mjs', '.js', '.ts', '.vue', '.json', '.scss'],
       alias: {
-        '@': resolve(dirname(fileURLToPath(import.meta.url)), 'src')
-      }
+        '@': resolve(dirname(fileURLToPath(import.meta.url)), 'src'),
+      },
     },
     base: './',
     root: resolve('./src/renderer'),
@@ -100,20 +101,20 @@ export default defineConfig(({ mode }) => {
     build: {
       sourcemap: isDevEnv,
       minify: !isDevEnv,
-      outDir: resolve('./dist')
+      outDir: resolve('./dist'),
     },
     plugins: [
       Vue(),
       VueJsx(),
       // Docs: https://github.com/vuetifyjs/vuetify-loader
       VuetifyPlugin({
-        autoImport: true
+        autoImport: true,
       }),
       // Docs: https://github.com/gxmari007/vite-plugin-eslint
       EslintPlugin(),
       // Docs: https://github.com/electron-vite/vite-plugin-electron
       ElectronPlugin(electronPluginConfigs),
-      RendererPlugin()
-    ]
+      RendererPlugin(),
+    ],
   }
 })

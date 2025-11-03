@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "Preserve",
-    "moduleDetection": "force",
-    "jsx": "preserve",
     "composite": true,
+    "target": "esnext",
+    "jsx": "preserve",
+    "moduleDetection": "force",
+    "module": "Preserve",
     "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   },
   "include": [
     "src/main",

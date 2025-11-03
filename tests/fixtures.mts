@@ -1,6 +1,7 @@
+import type { ElectronApplication, Page } from 'playwright'
+import { join } from 'node:path'
 import * as base from '@playwright/test'
-import { _electron as electron, Page, ElectronApplication } from 'playwright'
-import { join } from 'path'
+import { _electron as electron } from 'playwright'
 import { main } from '../package.json'
 import TestUtil from './testUtil.mjs'
 
@@ -13,7 +14,7 @@ const __testPath = join(__cwd, 'tests')
 const __testResultPath = join(__testPath, 'results')
 const __testScreenshotPath = join(__testResultPath, 'screenshots')
 
-export const beforeAll = async () => {
+export async function beforeAll() {
   // Open Electron app from build directory
   appElectron = await electron.launch({
     args: [
@@ -23,14 +24,14 @@ export const beforeAll = async () => {
       '--ignore-certificate-errors',
       '--ignore-ssl-errors',
       '--ignore-blocklist',
-      '--ignore-gpu-blocklist'
+      '--ignore-gpu-blocklist',
     ],
     locale: 'en-US',
     colorScheme: 'light',
     env: {
       ...process.env,
-      NODE_ENV: 'production'
-    }
+      NODE_ENV: 'production',
+    },
   })
   page = await appElectron.firstWindow()
 
@@ -49,15 +50,15 @@ export const beforeAll = async () => {
 
       return {
         packaged: app.isPackaged,
-        dataPath: app.getPath('userData')
+        dataPath: app.getPath('userData'),
       }
-    }
+    },
   )
 
   base.expect(evaluateResult.packaged, 'app is not packaged').toBe(false)
 }
 
-export const afterAll = async () => {
+export async function afterAll() {
   await appElectron.close()
 }
 
@@ -69,7 +70,7 @@ export const test = base.test.extend({
   // @ts-expect-error: `util` is not using types in playwright
   util: async ({ page }, use, testInfo) => {
     await use(new TestUtil(page, testInfo, __testScreenshotPath))
-  }
+  },
 })
 
 export const expect = base.expect
@@ -78,5 +79,5 @@ export default {
   test,
   expect,
   beforeAll,
-  afterAll
+  afterAll,
 }
